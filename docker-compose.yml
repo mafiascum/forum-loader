@@ -21,3 +21,6 @@ services:
       - type: bind
         source: ./dev/
         target: /mnt/dev/
+      - type: bind
+        source: ./dev-styles/
+        target: /opt/dev-styles/

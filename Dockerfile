@@ -13,8 +13,9 @@ RUN curl $PHPBB_URL -o /tmp/phpbb.zip
 RUN unzip /tmp/phpbb.zip -d /tmp/
 RUN cp -a /tmp/phpBB3/. /var/www/html/
 RUN rm /tmp/phpbb.zip
-RUN rm -rf /tmp/phpBB3
-run mkdir -p /var/www/html/cache
+RUN rm -rf /tmp/phpBB3/
+RUN mkdir -p /var/www/html/cache/
+RUN rm -rf /var/www/html/install/
 
 ADD config.php.docker /var/www/html/config.php
 
@@ -29,6 +30,12 @@ ADD install_git_extensions.sh /tmp/
 RUN chmod +x /tmp/install_git_extensions.sh
 RUN /tmp/install_git_extensions.sh
 RUN rm /tmp/install_git_extensions.sh /tmp/git_extensions
+
+ADD git_styles /tmp/
+ADD install_git_styles.sh /tmp/
+RUN chmod +x /tmp/install_git_styles.sh
+RUN /tmp/install_git_styles.sh
+RUN rm /tmp/install_git_styles.sh /tmp/git_styles
 
 RUN chown -R www-data:www-data /var/www/
 
