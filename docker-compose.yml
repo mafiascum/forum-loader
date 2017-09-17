@@ -2,6 +2,8 @@ version: '3.3'
 services:
   database:
     image: mariadb:10.2.8
+    env_file:
+      - .env
     environment:
       MYSQL_ROOT_PASSWORD: password
     volumes:
