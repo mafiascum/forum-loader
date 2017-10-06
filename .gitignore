@@ -1,4 +1,6 @@
+.DS_STORE
 .env
 config.php
 dev/
 dev-styles/
+docker-compose.override.yml
