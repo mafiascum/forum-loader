@@ -2189,7 +2189,7 @@ CREATE TABLE `phpbb_users` (
   `user_reminded` tinyint(4) NOT NULL DEFAULT 0,
   `user_reminded_time` int(11) unsigned NOT NULL DEFAULT 0,
   `user_topic_preview` tinyint(1) unsigned NOT NULL DEFAULT 1,
-  `user_old_emails` text COLLATE utf8_bin NOT NULL,
+  `user_old_emails` text COLLATE utf8_bin NULL,
   `user_vla_start` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
   `user_vla_till` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`user_id`),
