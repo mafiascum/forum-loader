@@ -30,6 +30,20 @@ The database is automatically provisioned with a skeleton dataset. Default usern
 
 On startup, a symlink will be created for each folder in `dev/` (which is mounted in the container). This is acceptable for development, but should not be used in production.
 
+## Running Tests
+a `docker-compose.test.yml` file has been provided with which to run tests for extensions that you may be currently developing. In order to use it, copy `test.env.sample` to `test.env`. The `dev` extensions are mounted to the `ext` directory inside of the phpbb installation, so in order to run tests for your local extensions in development, you may run:
+
+```
+docker-compose -f docker-compose.test.yml run test phpBB/ext/mafiascum/<your extension>/phpunit.xml.dist
+```
+(You may get 'connection refused' in a loop until your database comes up. This is ok and your tests will run once the database is reachable)
+
+You'll need to create the phpunit.xml.dist file in your extension's repo if you have not already done that.
+
+Note that, while the barebones sql template is included here, the data will be wiped out when you run tests -- only the schema will persist. You should write your own test fixtures if you need data inside your db tables.
+
+For more information on testing for phpbb extensions, visit https://area51.phpbb.com/docs/dev/3.2.x/extensions/tutorial_testing.html#
+
 # Run without Docker Compose
 Unless you have a good reason not to do so, the Docker Compose installation method is recommended over a manual install.
 

@@ -1,5 +1,6 @@
 .DS_STORE
 .env
+test.env
 config.php
 dev/
 dev-styles/
