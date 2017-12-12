@@ -1,14 +1,10 @@
 version: '3.3'
 services:
   test_database:
-    image: mariadb:10.2.8
+    image: mafiascum/forum-db:latest
     environment:
       MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - type: bind
-        source: ./ms_phpbb3.2_barebones.sql
-        target: /docker-entrypoint-initdb.d/ms_phpbb3.2_barebones.sql
-        read_only: true
+
   test:
     image: mafiascum/forum-tester:latest
     depends_on:
