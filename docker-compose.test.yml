@@ -4,6 +4,8 @@ services:
     image: mafiascum/forum-db:latest
     environment:
       MYSQL_ROOT_PASSWORD: password
+    networks:
+      - test
 
   test:
     image: mafiascum/forum-tester:latest
@@ -13,3 +15,7 @@ services:
       - test.env
     volumes:
       - ./dev/:/var/www/html/phpbb/phpBB/ext/mafiascum/
+    networks:
+      - test
+networks:
+  test:
