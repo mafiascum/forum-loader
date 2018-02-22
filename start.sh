@@ -12,6 +12,23 @@ find /var/www/html/styles/ -mindepth 1 -maxdepth 1 -type l -delete
 find /opt/ -maxdepth 2 -mindepth 2 -type d -exec basename {} \; | xargs -I {} rm -rf /var/www/html/styles/{}
 find /opt/ -mindepth 2 -maxdepth 2 -type d -exec ln -s -t /var/www/html/styles/ {} \;
 
+[[ "${PHPBB_INSTALL}" = "true" ]] && echo "" > config.php
+[[ "${PHPBB_INSTALL}" != "true" ]] && rm -rf install
+
+db_wait() {
+    until nc -z ${DB_HOST} ${DB_PORT}; do
+        echo "$(date) - waiting for database on ${DB_HOST}:${DB_PORT} to start before applying migrations"
+        sleep 3
+    done
+}
+
+db_migrate() {
+    if [[ "${PHPBB_INSTALL}" != "true" ]]; then
+        echo "$(date) - applying migrations"
+        php bin/phpbbcli.php db:migrate
+    fi
+}
+
 
 # Passthrough to php:apache start
-apache2-foreground
+db_wait && db_migrate && chown -R www-data:www-data /var/www/ && apache2-foreground

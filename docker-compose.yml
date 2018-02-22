@@ -1,16 +1,14 @@
 version: '3.3'
 services:
   database:
-    image: mariadb:10.2.8
+    image: mafiascum/forum-db:skeleton
+    ports:
+      - 3306:3306
     env_file:
       - .env
     environment:
       MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - type: bind
-        source: ./ms_phpbb3.2_barebones.sql
-        target: /docker-entrypoint-initdb.d/ms_phpbb3.2_barebones.sql
-        read_only: true
+      
   web:
     build: .
     ports:
@@ -20,9 +18,5 @@ services:
     env_file:
       - .env
     volumes:
-      - type: bind
-        source: ./dev/
-        target: /mnt/dev/
-      - type: bind
-        source: ./dev-styles/
-        target: /opt/dev-styles/
+      - ./dev/:/mnt/dev/
+      - ./dev-styles/:/opt/dev-styles/
