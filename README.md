@@ -34,7 +34,7 @@ On startup, a symlink will be created for each folder in `dev/` (which is mounte
 a `docker-compose.test.yml` file has been provided with which to run tests for extensions that you may be currently developing. In order to use it, copy `test.env.sample` to `test.env`. The `dev` extensions are mounted to the `ext` directory inside of the phpbb installation, so in order to run tests for your local extensions in development, you may run:
 
 ```
-docker-compose -f docker-compose.test.yml run test phpBB/ext/mafiascum/<your extension>/phpunit.xml.dist
+docker-compose -f docker-compose-test-extension.yml run test phpBB/ext/mafiascum/<your extension>/phpunit.xml.dist
 ```
 (You may get 'connection refused' in a loop until your database comes up. This is ok and your tests will run once the database is reachable)
 
