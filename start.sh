@@ -16,10 +16,24 @@ find /opt/ -mindepth 2 -maxdepth 2 -type d -exec ln -s -t /var/www/html/styles/ 
 [[ "${PHPBB_INSTALL}" != "true" ]] && rm -rf install
 
 db_wait() {
-    until nc -z ${DB_HOST} ${DB_PORT}; do
+    retry_count=0
+    retryMax=5
+    retrySleep=3
+    until [[ $retry_count -ge $retryMax ]]; do
+        set +e
+        nc -z ${DB_HOST} ${DB_PORT}
+        success=$?
+	set -e
+        [[ $success == 0 ]] && break
+	((retry_count  ++)) || true
         echo "$(date) - waiting for database on ${DB_HOST}:${DB_PORT} to start before applying migrations"
-        sleep 3
+        sleep $retrySleep
     done
+
+    if [[ $success != 0 ]]; then
+	echo "failed to connect to database after $retryMax tries." >&2
+        exit 1
+    fi
 }
 
 db_migrate() {
