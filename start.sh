@@ -17,7 +17,7 @@ find /opt/ -mindepth 2 -maxdepth 2 -type d -exec ln -s -t /var/www/html/styles/ 
 
 db_wait() {
     retry_count=0
-    retryMax=5
+    retryMax=10
     retrySleep=3
     until [[ $retry_count -ge $retryMax ]]; do
         set +e
