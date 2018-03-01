@@ -1,6 +1,6 @@
 db_wait() {
     retry_count=0
-    retryMax=5
+    retryMax=10
     retrySleep=3
     until [[ $retry_count -ge $retryMax ]]; do
         set +e
