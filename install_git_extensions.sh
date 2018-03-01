@@ -1,7 +1,7 @@
 #!/bin/bash
 mkdir -p /var/www/html/ext/mafiascum/
 cd /var/www/html/ext/mafiascum/
-echo "using branch ${BRANCH_NAME-master}"
+echo "using branch ${BRANCH_NAME:-master}"
 cat /tmp/git_extensions | while read repo; do
   git clone --depth=1 --branch=${BRANCH_NAME:-master} $repo
 done
