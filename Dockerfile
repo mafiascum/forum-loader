@@ -1,4 +1,4 @@
-FROM php:7.1.9-apache
+FROM php:7.1.14-apache
 EXPOSE 80
 
 ARG PHPBB_URL=https://www.phpbb.com/files/release/phpBB-3.2.1.zip
