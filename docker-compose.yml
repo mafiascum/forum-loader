@@ -11,8 +11,6 @@ services:
       
   web:
     build: .
-    ports:
-      - 80:80
     depends_on:
       - database
     env_file:
@@ -20,3 +18,12 @@ services:
     volumes:
       - ./dev/:/mnt/dev/
       - ./dev-styles/:/opt/dev-styles/
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - web
+    env_file:
+      - .env
