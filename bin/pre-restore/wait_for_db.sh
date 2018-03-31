@@ -4,12 +4,12 @@ db_wait() {
     retrySleep=3
     until [[ $retry_count -ge $retryMax ]]; do
         set +e
-        nc -z ${DBSERVER} ${DBPORT}
+        nc -z ${DB_SERVER} ${DB_PORT}
         success=$?
 	set -e
         [[ $success == 0 ]] && break
 	((retry_count  ++)) || true
-        echo "$(date) - waiting for database on ${DBSERVER}:${DBPORT} to start before restore"
+        echo "$(date) - waiting for database on ${DB_SERVER}:${DB_PORT} to start before restore"
         sleep $retrySleep
     done
 
