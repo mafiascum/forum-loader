@@ -19,11 +19,20 @@ services:
       - ./dev/:/mnt/dev/
       - ./dev-styles/:/opt/dev-styles/
 
+  api:
+    image: mafiascum/api-gateway:latest
+    depends_on:
+      - database
+    env_file:
+      - .env
+    command: ["watch"]
+
   nginx:
     build: ./nginx
     ports:
       - 80:80
     depends_on:
       - web
+      - api
     env_file:
       - .env
