@@ -8,6 +8,15 @@ services:
       - .env
     environment:
       MYSQL_ROOT_PASSWORD: password
+
+  sphinx:
+    build: ./sphinx
+    depends_on:
+      - database
+    env_file:
+      - .env
+    environment:
+      SPHINX_MODE: indexing
       
   web:
     build: .
