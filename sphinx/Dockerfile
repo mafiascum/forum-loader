@@ -12,6 +12,4 @@ ADD ./config/sphinx.conf /etc/sphinxsearch/sphinx.conf.template
 ADD crontab /tmp/sphinx_cron
 RUN chmod 0644 /tmp/sphinx_cron
 
-RUN cron
-
-ENTRYPOINT ["sh", "-c", "dockerize -template /etc/sphinxsearch/sphinx.conf.template:/etc/sphinxsearch/sphinx.conf -template /tmp:/etc/cron.d  -wait tcp://$DB_HOST:$DB_PORT -timeout 30s /sbin/entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "cron && dockerize -template /etc/sphinxsearch/sphinx.conf.template:/etc/sphinxsearch/sphinx.conf -template /tmp:/etc/cron.d  -wait tcp://$DB_HOST:$DB_PORT -timeout 30s /sbin/entrypoint.sh"]
