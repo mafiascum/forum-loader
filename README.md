@@ -11,6 +11,21 @@ Copy `.env.sample` to `.env` and change it if necessary.
 ```bash
 # Start services
 docker-compose up
+
+//////////
+#If the docker-compose up fails with a message that services cannot come up then you'll need to add one of the two following lines to your Dockerfile
+#Remove the ***** around the code, I just do that to make it easier to read.  
+#The reason this is not committed is this seemed to be a one off for MathBlade on an older mac using docker toolbox and not the main Docker.
+#This likely will not be necessary.
+******
+RUN printf "deb http://security/debian.org jessie/updates/main amd64 Packages\n" >> /etc/apt/sources.list
+******
+#OR
+******
+RUN printf "deb http://security.debian.org jessie/updates/main amd64 Packages\n" >> /etc/apt/sources.list
+******
+/////// End If the docker-compose up fails...
+
 # Reset services
 docker-compose down
 # Rebuild container
@@ -24,9 +39,10 @@ docker-compose exec database sh -c 'exec mysql -u"$DB_USER" -p"$DB_PASS" $DB_NAM
 
 ## Browse the forum
 The forum is accessible on http://docker-host - which is probably http://localhost unless you are using Docker Machine.
+If using docker-toolbox the forum is accessible on 192.168.99.100 and not localhost or dockerhost.
 
 ## Details
-The database is automatically provisioned with a skeleton dataset. Default username/password is Kison/abc123. Resetting the services and rerunning will wipe the database, allowing start from a clean slate.
+The database is automatically provisioned with a skeleton dataset. Default username/password is dummy/dummydummy. Resetting the services and rerunning will wipe the database, allowing start from a clean slate.
 
 On startup, a symlink will be created for each folder in `dev/` (which is mounted in the container). This is acceptable for development, but should not be used in production.
 
