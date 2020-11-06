@@ -36,6 +36,13 @@ services:
       - .env
     command: ["watch"]
 
+  sitechat:
+    image: mafiascum/site-chat-server
+    depends_on:
+      - database
+    env_file:
+      - .env
+
   nginx:
     build: ./nginx
     ports:
@@ -43,5 +50,6 @@ services:
     depends_on:
       - web
       - api
+      - sitechat
     env_file:
       - .env
