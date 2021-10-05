@@ -5,26 +5,24 @@ This repo hosts the code used on https://forum.mafiascum.net
 This assumes your already have Docker and Docker Compose installed. If you don't, go find a guide for installing on the OS you're using (The official docs will likely be helpful here).
 
 ## First Time Setup
-Copy `.env.sample` to `.env` and change it if necessary.
+Copy `.env.sample` to `.env` and change it if necessary. You likely don't need to change anything.
+
+You should then modify your /etc/hosts file to point, at the very least, forum.dev.mafiascum.net to your loopback ip address.
+(Unless you changed this to a different domain in the prior step - use that instead in this case) 
+Instructions on how to do this on all platforms can be found here: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
+
+you should end up with an entry that looks like the following
+```
+127.0.0.1 forum.dev.mafiascum.net
+```
 
 ## Running
 ```bash
 # Start services
 docker-compose up
 
-//////////
-#If the docker-compose up fails with a message that services cannot come up then you'll need to add one of the two following lines to your Dockerfile
-#Remove the ***** around the code, I just do that to make it easier to read.  
-#The reason this is not committed is this seemed to be a one off for MathBlade on an older mac using docker toolbox and not the main Docker.
-#This likely will not be necessary.
-******
-RUN printf "deb http://security/debian.org jessie/updates/main amd64 Packages\n" >> /etc/apt/sources.list
-******
-#OR
-******
-RUN printf "deb http://security.debian.org jessie/updates/main amd64 Packages\n" >> /etc/apt/sources.list
-******
-/////// End If the docker-compose up fails...
+# Start services in detached mode (will return terminal control to you)
+docker-compose up -d
 
 # Reset services
 docker-compose down
@@ -38,13 +36,19 @@ docker-compose exec database sh -c 'exec mysql -u"$DB_USER" -p"$DB_PASS" $DB_NAM
 ```
 
 ## Browse the forum
-The forum is accessible on http://docker-host - which is probably http://localhost unless you are using Docker Machine.
-If using docker-toolbox the forum is accessible on 192.168.99.100 and not localhost or dockerhost.
+Simply navigate to http://forum.dev.mafiascum.net
+
 
 ## Details
-The database is automatically provisioned with a skeleton dataset. Default username/password is dummy/dummydummy. Resetting the services and rerunning will wipe the database, allowing start from a clean slate.
+The database is provisioned with only a stock phpbb install.
+The admin user and password is `admin:adminadmin`
 
-On startup, a symlink will be created for each folder in `dev/` (which is mounted in the container). This is acceptable for development, but should not be used in production.
+On startup, a symlink will be created for each folder in `dev/` and `dev-styles/` (which are both mounted in the container). 
+In practice, this means that you will be able to locally modify extensions and styles and see changes to them in real time.
+
+if you need to add a new extension to the board, you'll need to add its repo to git_extensions, and then clone it under the `dev/` directory
+if you need to add a new style to the board, you'll need to add its repo to git_styles, and then clone it under the `dev-styles/` directory
+
 
 ## Running Tests
 a `docker-compose.test.yml` file has been provided with which to run tests for extensions that you may be currently developing. In order to use it, copy `test.env.sample` to `test.env`. The `dev` extensions are mounted to the `ext` directory inside of the phpbb installation, so in order to run tests for your local extensions in development, you may run:
@@ -59,19 +63,3 @@ You'll need to create the phpunit.xml.dist file in your extension's repo if you 
 Note that, while the barebones sql template is included here, the data will be wiped out when you run tests -- only the schema will persist. You should write your own test fixtures if you need data inside your db tables.
 
 For more information on testing for phpbb extensions, visit https://area51.phpbb.com/docs/dev/3.2.x/extensions/tutorial_testing.html#
-
-# Run without Docker Compose
-Unless you have a good reason not to do so, the Docker Compose installation method is recommended over a manual install.
-
-## Running
-You will need to run a MySQL server (Or equivalent, such as MariaDB) and Apache2 with PHP. Unfortunately, because of the wide variety of possible scenarios there is no canonical guide for installation.
-
-In general, your setup must:
-- Include MySQL (Or equivalent), Apache 2, and PHP 5.6
-- Have mod_rewrite installed and enabled
-- Have the PHP extensions mysqli and gd installed and enabled
-- Include a cache directory that is writable by the Apache process
-- Include imagemagic and libpng-dev (Or equivalent)
-
-## Adding Config
-Simply add a `config.php` in this directory (It won't be committed, as it is in the `.gitignore`). See `config.php.docker` for an example.
