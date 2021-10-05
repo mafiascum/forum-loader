@@ -1,12 +1,13 @@
 version: '3.3'
 services:
   database:
-    image: mafiascum/forum-db:skeleton
+    image: mariadb
     ports:
       - 3306:3306
     env_file:
       - .env
     environment:
+      MYSQL_DATABASE: ms_phpbb3
       MYSQL_ROOT_PASSWORD: password
 
   sphinx:
@@ -27,6 +28,10 @@ services:
     volumes:
       - ./dev/:/mnt/dev/
       - ./dev-styles/:/opt/dev-styles/
+      - web-files:/var/www/html/files
+      - web-images:/var/www/html/images
+      - web-store:/var/www/html/store
+      - web-meta:/var/www/html/meta
 
   api:
     image: mafiascum/api-gateway:latest
@@ -45,6 +50,7 @@ services:
 
   nginx:
     build: ./nginx
+    restart: unless-stopped
     ports:
       - 80:80
     depends_on:
@@ -53,3 +59,14 @@ services:
       - sitechat
     env_file:
       - .env
+      
+volumes:
+  web-files:
+    driver: local
+  web-images:
+    driver: local
+  web-store:
+    driver: local
+  web-meta:
+    driver: local
+

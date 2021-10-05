@@ -12,8 +12,8 @@ find /var/www/html/styles/ -mindepth 1 -maxdepth 1 -type l -delete
 find /opt/ -maxdepth 2 -mindepth 2 -type d -exec basename {} \; | xargs -I {} rm -rf /var/www/html/styles/{}
 find /opt/ -mindepth 2 -maxdepth 2 -type d -exec ln -s -t /var/www/html/styles/ {} \;
 
-[[ "${PHPBB_INSTALL}" = "true" ]] && echo "" > config.php
-[[ "${PHPBB_INSTALL}" != "true" ]] && rm -rf install
+# [[ "${PHPBB_INSTALL}" = "true" ]] && echo "" > config.php
+# [[ "${PHPBB_INSTALL}" != "true" ]] && rm -rf install
 
 db_wait() {
     retry_count=0
@@ -36,13 +36,22 @@ db_wait() {
     fi
 }
 
-db_migrate() {
-    if [[ "${PHPBB_INSTALL}" != "true" ]]; then
-        echo "$(date) - applying migrations"
-        php bin/phpbbcli.php db:migrate
+install() {
+    if [[ ! -f meta/config.php ]]; then
+        echo "$(date) - installing phpbb"
+        envsubst < /var/www/html/install/install-config.yml.template > /var/www/html/install/install-config.yml
+        php install/phpbbcli.php install install/install-config.yml
+        cp config.php meta/config.php
     fi
+    rm -rf install
+}
+
+db_migrate() {
+    echo "$(date) - applying migrations"
+    cp meta/config.php config.php
+    php bin/phpbbcli.php db:migrate
 }
 
 
 # Passthrough to php:apache start
-db_wait && db_migrate && chown -R www-data:www-data /var/www/ && apache2-foreground
+db_wait && install && db_migrate && chown -R www-data:www-data /var/www/ && apache2-foreground

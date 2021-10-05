@@ -3,7 +3,8 @@ EXPOSE 80
 
 ARG BRANCH_NAME
 
-ADD config.php.docker /var/www/html/config.php
+# ADD config.php.docker /var/www/html/config.php
+ADD install-config.yml.docker /var/www/html/install/install-config.yml.template
 
 ADD zip_extensions /tmp/
 ADD install_zip_extensions.sh /tmp/
