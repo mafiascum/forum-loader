@@ -1,6 +1,13 @@
 # MafiaScum Forum
 This repo hosts the code used on https://forum.mafiascum.net
 
+# IF DEVELOPING ON WINDOWS
+Before cloning this repository, run:
+
+`git config --global core.autocrlf input`
+
+This will ensure that any file references don't have unexpected CRs at the end of them.
+
 # Run with Docker Compose
 This assumes your already have Docker and Docker Compose installed. If you don't, go find a guide for installing on the OS you're using (The official docs will likely be helpful here).
 
