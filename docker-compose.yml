@@ -9,6 +9,8 @@ services:
     environment:
       MYSQL_DATABASE: ms_phpbb3
       MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mariadb-data:/var/lib/mysql
 
   sphinx:
     build: ./sphinx
@@ -68,5 +70,7 @@ volumes:
   web-store:
     driver: local
   web-meta:
+    driver: local
+  mariadb-data:
     driver: local
 
