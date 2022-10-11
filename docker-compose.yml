@@ -61,6 +61,11 @@ services:
       - sitechat
     env_file:
       - .env
+
+  postfix:
+    image: boky/postfix
+    env_file:
+      - .env
       
 volumes:
   web-files:
