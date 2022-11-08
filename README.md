@@ -1,3 +1,6 @@
+# Deprecation Notice
+This repository has been completely replaced by https://github.com/mafiascum/forum-deployment for development. It should not be necessary to use this repository any longer.
+
 # MafiaScum Forum
 This repo hosts the code used on https://forum.mafiascum.net
 
